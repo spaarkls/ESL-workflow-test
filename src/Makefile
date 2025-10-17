@@ -1,18 +1,25 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Werror -Wextra
+LIBS = -lcheck -lm -lsubunit
+BUILD_DIR = build
+
+all: test
 
 
-all: vector.out
+test: main.o libvector3D.a
+	$(CC) $(CFLAGS) $(BUILD_DIR)/main.o -L$(BUILD_DIR) -lvector3D -o tests $(LIBS)
 
-vector.out: main.o vector3D.o
-	$(CC) $(CFLAGS) $^ -o $@
+libvector3D.a: vector3D.o
+	ar rcs $@ $^
+	mkdir -p $(BUILD_DIR) && mv *.o $(BUILD_DIR)/ && mv *.a $(BUILD_DIR)/ 
 
-main.o: main.c
-	$(CC) -c $(CFLAGS) main.c -o $@
 
 vector3D.o: vector/vector3D.c vector/vector3D.h
 	$(CC) -c $(CFLAGS) vector/vector3D.c -o $@
 
+main.o: main.c
+	$(CC) -c $(CFLAGS) $^ -o $@ 
+
 
 clean:
-	rm -rf *.o *.out
+	rm -rf build/* tests
