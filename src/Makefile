@@ -3,8 +3,9 @@ CFLAGS = -std=c11 -Wall -Werror -Wextra
 LIBS = -lcheck -lm -lsubunit
 BUILD_DIR = build
 
-all: test
+.PHONY: all clean test
 
+all: test
 
 test: main.o libvector3D.a
 	$(CC) $(CFLAGS) $(BUILD_DIR)/main.o -L$(BUILD_DIR) -lvector3D -o tests $(LIBS)
